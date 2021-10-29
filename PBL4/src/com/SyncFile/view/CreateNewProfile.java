@@ -1,4 +1,4 @@
-package GUI;
+package com.SyncFile.view;
 
 import java.awt.Dimension;
 import java.awt.Font;

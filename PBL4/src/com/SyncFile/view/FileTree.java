@@ -1,4 +1,4 @@
-package GUI;
+package com.SyncFile.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/com/SyncFile/controller/DirectoryController.java=UTF-8
+encoding//src/com/SyncFile/controller/ProfileController.java=UTF-8
+encoding//src/com/SyncFile/controller/UserController.java=UTF-8
+encoding//src/com/SyncFile/dao/DBHelper.java=UTF-8
+encoding//src/com/SyncFile/dao/DirUserDAO.java=UTF-8
+encoding//src/com/SyncFile/dao/DirectoryDAO.java=UTF-8
+encoding//src/com/SyncFile/dao/ProfileDAO.java=UTF-8
+encoding//src/com/SyncFile/dao/UserDAO.java=UTF-8
+encoding//src/main/running.java=UTF-8
