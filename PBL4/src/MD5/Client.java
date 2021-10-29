@@ -1,161 +1,179 @@
 package MD5;
- 
-import java.io.BufferedInputStream;
+
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import javax.swing.JTextArea;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
- 
-public class Client {
-    // create Socket object
-    private Socket client;
-    private String host;
-    private int port;
-    private JTextArea textAreaLog;
- 
-    public Client(String host, int port, JTextArea textAreaLog) {
-        this.host = host;
-        this.port = port;
-        this.textAreaLog = textAreaLog;
-    }
-     
-    /**
-     * connect to server
-     * 
-     * @author viettuts.vn
-     */
-    public void connectServer() {
-        try {
-            client = new Socket("localhost", 10000);
-            textAreaLog.append("connected to server.\n");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
- 
-    /**
-     * send file to server
-     * 
-     * @param sourceFilePath
-     * @param destinationDir
-     */
-    public void sendFile(String sourceFilePath, String destinationDir) {
-        DataOutputStream outToServer = null;
-        ObjectOutputStream oos = null;
-        ObjectInputStream ois = null;
- 
-        try {
-            // make greeting
-            outToServer = new DataOutputStream(client.getOutputStream());
-            outToServer.writeUTF("Hello from " + client.getLocalSocketAddress());
- 
-            // get file info
-            FileInfo fileInfo = getFileInfo(sourceFilePath, destinationDir);
- 
-            // send file
-            oos = new ObjectOutputStream(client.getOutputStream());
-            oos.writeObject(fileInfo);
- 
-            // get confirmation
-            ois = new ObjectInputStream(client.getInputStream());
-            fileInfo = (FileInfo) ois.readObject();
-            if (fileInfo != null) {
-                textAreaLog.append("send file to server "
-                    + fileInfo.getStatus() + "\n");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            // close all stream
-            closeStream(oos);
-            closeStream(ois);
-            closeStream(outToServer);
-        }
-    }
- 
-    /**
-     * get source file info
-     * 
-     * @author viettuts.vn
-     * @param sourceFilePath
-     * @param destinationDir
-     * @return FileInfo
-     */
-    private FileInfo getFileInfo(String sourceFilePath, String destinationDir) {
-        FileInfo fileInfo = null;
-        BufferedInputStream bis = null;
-        try {
-            File sourceFile = new File(sourceFilePath);
-            bis = new BufferedInputStream(new FileInputStream(sourceFile));
-            fileInfo = new FileInfo();
-            byte[] fileBytes = new byte[(int) sourceFile.length()];
-            // get file info
-            bis.read(fileBytes, 0, fileBytes.length);
-            fileInfo.setFilename(sourceFile.getName());
-            fileInfo.setDataBytes(fileBytes);
-            fileInfo.setDestinationDirectory(destinationDir);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            closeStream(bis);
-        }
-        return fileInfo;
-    }
- 
-    /**
-     * close socket
-     * 
-     * @author viettuts.vn
-     */
-    public void closeSocket() {
-        try {
-            if (client != null) {
-                client.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
- 
-    /**
-     * close input stream
-     * 
-     * @author viettuts.vn
-     */
-    public void closeStream(InputStream inputStream) {
-        try {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
- 
-    /**
-     * close output stream
-     * 
-     * @author viettuts.vn
-     */
-    public void closeStream(OutputStream outputStream) {
-        try {
-            if (outputStream != null) {
-                outputStream.close();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+
+public class Client implements Runnable {
+
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
+	Socket soc;
+	String Source="D:\\Study\\Client\\";
+	byte[] buffer = new byte[8192];
+	public static void main(String[] args) {
+		new Thread(new Client()).start();
+		// TODO Auto-generated method stub
+
+	}
+
+	public Client(){
+		try {
+		soc = new Socket("localhost", 5024);
+			oos = new ObjectOutputStream(soc.getOutputStream());
+			ois = new ObjectInputStream(soc.getInputStream());
+			//ois= new ObjectInputStream(soc.getInputStream());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	public void Receive(String Source1,String name) {
+		try {
+			
+			String Filename=name;
+			System.out.println(Filename.toString());
+			//	String ThisSource = Source1+Filename;
+			//	System.out.println(ThisSource);
+				File fi= new File(Source1+"\\"+Filename);
+				//System.out.println(fi.getAbsolutePath());
+				FileOutputStream F = new FileOutputStream(fi);
+				int cout;
+				int s;
+				while((cout=ois.read(buffer))>0) {
+					//System.out.println(s+" "+name);
+					//cout=ois.read(buffer);
+					System.out.println(cout+" "+Filename);
+					F.write(buffer, 0, cout);
+				}
+				System.out.println("done "+Filename);
+				F.flush();
+				F.close();
+				
+				Thread.sleep(100);
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+	}
+	
+	public void CheckFolderandFile(String ThisSource,int length) {
+		try {
+		//		String ThissSource = ThisSource;
+			int cout=0;
+			int size=length;
+		//	System.out.println(ThissSource+ " "+size);
+			while(cout<size) {
+				String Data=(String)ois.readObject();
+				String[] name =Data.split(":");
+				if(name[0].equals("F")) {
+				//	String ThissSource = ThisSource;
+				//	System.out.println(ThissSource);
+					Receive(ThisSource, name[1]);
+				}
+				else if(name[0].equals("D")) {
+					String newSource=ThisSource+"\\"+name[1];
+					Path dir = Paths.get(newSource);
+					Files.createDirectories(dir);
+					//System.out.println(newSource);
+					int n=(int)ois.readObject();
+					CheckFolderandFile(newSource, n);
+				}
+				cout++;
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			//System.out.println(e.toString());
+		}
+		
+		
+	}
+	void test() {
+		String name;
+		try {
+			name = ois.readUTF();
+			Receive(Source,name );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+	}
+	public void Reconect() {
+		try {
+			oos.close();
+			ois.close();
+			oos = new ObjectOutputStream(soc.getOutputStream());
+			ois= new ObjectInputStream(soc.getInputStream());
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+		
+	}
+
+	@Override
+	public void run() {
+			//System.out.println(dis.readInt());
+		int length=0;
+			try {
+				length=(int)ois.readObject();
+				System.out.println(length);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		// TODO Auto-generated method stub
+		while(true) {
+			try {
+				CheckFolderandFile(Source,length);
+				//test();
+				//String name;
+				//name =(String) ois.readObject();
+				//Receive(Source,name );
+//				Object Filename=ois.readObject();
+//				System.out.println(Filename.toString());
+//				//	String ThisSource = Source1+Filename;
+//				//	System.out.println(ThisSource);
+//					File fi= new File(Source+"\\"+Filename);
+//					//System.out.println(fi.getAbsolutePath());
+//					FileOutputStream F = new FileOutputStream(fi);
+//					int cout;
+//					int s;
+//					while((cout=ois.read(buffer))>0) {
+//						//System.out.println(s+" "+name);
+//						//cout=ois.read(buffer);
+//						System.out.println(cout+" "+Filename);
+//						F.write(buffer, 0, cout);
+//					}
+//					System.out.println("done "+Filename);
+//					F.flush();
+//					F.close();
+//					
+//					Thread.sleep(100);
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			//	System.out.println(e.toString());
+			}
+			//Reconect();
+			
+		}
+	}
+
 }
