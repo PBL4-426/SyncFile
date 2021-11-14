@@ -11,7 +11,6 @@ primary key(user_id)
 create table `directory`(
 directory_id int auto_increment,
 directory_name varchar(30),
-folder_id int,
 folder varchar(30),
 check_action bit,
 primary key(directory_id)
@@ -54,12 +53,12 @@ INSERT INTO `dong_bo_du_lieu`.`users` (`email`, `pass`, `user_roll`) VALUES ('ho
 INSERT INTO `dong_bo_du_lieu`.`users` (`email`, `pass`, `user_roll`) VALUES ('long@gmail.com', '123456', 'user');
 INSERT INTO `dong_bo_du_lieu`.`users` (`email`, `pass`, `user_roll`) VALUES ('nhan@gmail.com', '123456', 'user');
 
-INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder_id`, `folder`, `check_action`) VALUES ('aa', '1', 'java', b'1');
-INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder_id`, `folder`, `check_action`) VALUES ('bb', '2', 'html', b'1');
-INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder_id`, `folder`, `check_action`) VALUES ('cc', '3', 'js', b'1');
-INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder_id`, `folder`, `check_action`) VALUES ('dd', '4', 'java', b'1');
-INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder_id`, `folder`, `check_action`) VALUES ('ee', '5', 'html', b'0');
-INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder_id`, `folder`, `check_action`) VALUES ('ff', '6', 'js', b'0');
+INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder`, `check_action`) VALUES ('phat', 'java', b'1');
+INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder`, `check_action`) VALUES ('phat', 'html', b'1');
+INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder`, `check_action`) VALUES ('phat', 'js', b'1');
+INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder`, `check_action`) VALUES ('phuoc', 'java', b'1');
+INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder`, `check_action`) VALUES ('phuoc', 'html', b'0');
+INSERT INTO `dong_bo_du_lieu`.`directory` (`directory_name`, `folder`, `check_action`) VALUES ('phuoc', 'js', b'0');
 
 INSERT INTO `dong_bo_du_lieu`.`schedule` (`start_time`, `end_time`, `count_time`) VALUES ('2021-10-30 14:00:00', '2021-10-30 15:00:00', '3600');
 INSERT INTO `dong_bo_du_lieu`.`schedule` (`start_time`, `end_time`, `count_time`) VALUES ('2021-10-29 16:00:00', '2021-10-30 16:00:00', '86400');
