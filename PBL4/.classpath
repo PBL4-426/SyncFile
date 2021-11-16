@@ -7,6 +7,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="Icon"/>
-	<classpathentry kind="lib" path="libs/mssql-jdbc-9.2.1.jre15.jar"/>
+	<classpathentry kind="lib" path="libs/mysql-connector-java-8.0.21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

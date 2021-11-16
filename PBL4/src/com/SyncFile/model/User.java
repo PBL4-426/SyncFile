@@ -3,29 +3,54 @@ package com.SyncFile.model;
 import java.io.Serializable;
 
 public class User implements Serializable {
-	private String Email;
-	private String passWord;
+	private int user_id;
+	private String email;
+	private String password;
+	private String user_roll;
 
-	public User(String email, String passWord) {
+	public User(int user_id, String email, String password, String user_roll) {
 		super();
-		Email = email;
-		this.passWord = passWord;
+		this.user_id = user_id;
+		this.email = email;
+		this.password = password;
+		this.user_roll = user_roll;
+	}
+
+	public int getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
 
 	public String getEmail() {
-		return Email;
+		return email;
 	}
 
 	public void setEmail(String email) {
-		Email = email;
+		this.email = email;
 	}
 
-	public String getPassWord() {
-		return passWord;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getUser_roll() {
+		return user_roll;
+	}
+
+	public void setUser_roll(String user_roll) {
+		this.user_roll = user_roll;
+	}
+
+	@Override
+	public String toString() {
+		return "User [email=" + email + ", password=" + password + ", user_roll=" + user_roll + "]";
 	}
 
 }
